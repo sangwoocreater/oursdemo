@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>로그인</title>
+  <style>
+    .link a,
+.home-link a {
+  color: #3498db;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link a:hover,
+.link a:active,
+.home-link a:hover,
+.home-link a:active {
+  text-decoration: underline;
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .link {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .link a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .home-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .home-link a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .home-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>로그인</h2>
+    <form>
+      <input type="text" placeholder="아이디" required />
+      <input type="password" placeholder="비밀번호" required />
+      <button type="submit">로그인</button>
+    </form>
+
+    <div class="link">
+      <a href="signup.html">회원가입</a>
+    </div>
+    <!-- ✅ 홈으로 돌아가기 버튼 -->
+    <div class="home-link">
+      <a href="index.html">홈으로</text-decoration: none>
+    </div>
+  </div>
+
+</body>
+</html>

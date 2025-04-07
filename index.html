@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Space</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 상단 메뉴 -->
+  <header>
+    <div class="nav-left">
+      <a href="index.html">홈</a>
+    </div>
+
+    <div class="nav-center">
+      <a href="#">게시판</a>
+      <a href="#">다문화 가정</a>
+      <a href="#">유학생</a>
+      <a href="#">외국인 근로자</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="login.html">로그인</a>
+      <a href="signup.html">회원가입</a>
+    </div>
+
+    <!-- 햄버거 아이콘 -->
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+  </header>
+
+  <!-- 모바일 메뉴 -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">게시판</a>
+    <a href="#">다문화 가정</a>
+    <a href="#">유학생</a>
+    <a href="#">외국인 근로자</a>
+    <a href="login.html">로그인</a>
+    <a href="signup.html">회원가입</a>
+  </div>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="container">
+    <h1>Welcome to Our Space 🌍</h1>
+    <p>다문화 가정, 유학생, 외국인 근로자를 위한 글로벌 커뮤니티 플랫폼</p>
+  </div>
+
+  <!-- 햄버거 메뉴 토글 기능 -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("show");
+    }
+  </script>
+
+</body>
+</html>

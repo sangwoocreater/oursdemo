@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>회원가입</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 340px;
+      text-align: center;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    /* 텍스트 링크 스타일 */
+    .link, .home-link {
+      margin-top: 15px;
+    }
+
+    .link a,
+    .home-link a {
+      color: #3498db;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .link a:hover,
+    .link a:active,
+    .home-link a:hover,
+    .home-link a:active {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+    <h2>회원가입</h2>
+    <form>
+      <input type="text" placeholder="아이디" required />
+      <input type="email" placeholder="이메일" required />
+      <input type="password" placeholder="비밀번호" required />
+      <input type="password" placeholder="비밀번호 확인" required />
+      <button type="submit">가입하기</button>
+    </form>
+
+    <!-- 로그인으로 돌아가기 링크 -->
+    <div class="link">
+      <a href="login.html">로그인으로 돌아가기</a>
+    </div>
+
+    <!-- 홈으로 돌아가기 링크 -->
+    <div class="home-link">
+      <a href="index.html">홈으로</a>
+    </div>
+  </div>
+
+</body>
+</html>
