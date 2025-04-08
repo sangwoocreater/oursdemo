@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시글 보기</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .post-container {
+      max-width: 800px;
+      margin: 100px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .post-container h2 {
+      color: #3498db;
+    }
+    .comments {
+      margin-top: 30px;
+    }
+    .comment {
+      border-top: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .comment-buttons button {
+      margin-right: 5px;
+    }
+    .emoji-picker {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="post-container">
+    <h2 id="postTitle"></h2>
+    <p><strong>작성자:</strong> <span id="postAuthor"></span></p>
+    <p id="postContent"></p>
+
+    <button id="likeBtn">🤍 공감</button> <span id="likeCount">0</span>
+    <br><br>
+    <button onclick="location.href='board.html'">← 목록으로</button>
+
+    <div class="comments">
+      <h3>댓글</h3>
+      <div id="commentList"></div>
+      <textarea id="commentInput" rows="3" placeholder="댓글을 입력하세요..."></textarea>
+      <div class="emoji-picker">
+        <button onclick="insertEmoji('😊')">😊</button>
+        <button onclick="insertEmoji('❤️')">❤️</button>
+        <button onclick="insertEmoji('👍')">👍</button>
+      </div>
+      <button onclick="addComment()">댓글 작성</button>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(location.search);
+    const postId = parseInt(urlParams.get("id"));
+    const user = localStorage.getItem("user");
+    if (!user) {
+      alert("로그인 후 이용해주세요.");
+      location.href = "login.html";
+    }
+
+    const posts = JSON.parse(localStorage.getItem("posts")) || [];
+    const post = posts.find(p => p.id === postId);
+
+    if (!post) {
+      document.body.innerHTML = '<p>게시글을 찾을 수 없습니다.</p>';
+    } else {
+      document.getElementById("postTitle").textContent = post.title;
+      document.getElementById("postAuthor").textContent = post.author;
+      document.getElementById("postContent").textContent = post.content;
+    }
+
+    // 공감 수 처리
+    let likeCount = parseInt(localStorage.getItem(`like_${postId}`)) || 0;
+    document.getElementById("likeCount").textContent = likeCount;
+    document.getElementById("likeBtn").addEventListener("click", () => {
+      likeCount++;
+      localStorage.setItem(`like_${postId}`, likeCount);
+      document.getElementById("likeCount").textContent = likeCount;
+    });
+
+    // 댓글 표시
+    const commentList = document.getElementById("commentList");
+    let comments = JSON.parse(localStorage.getItem(`comments_${postId}`)) || [];
+
+    function renderComments() {
+      commentList.innerHTML = "";
+      comments.forEach((c, i) => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `<p>${c.author}: ${c.text}</p>
+        <div class="comment-buttons">
+          <button onclick="editComment(${i})">수정</button>
+          <button onclick="deleteComment(${i})">삭제</button>
+        </div>`;
+        commentList.appendChild(div);
+      });
+    }
+
+    renderComments();
+
+    function insertEmoji(emoji) {
+      const input = document.getElementById("commentInput");
+      input.value += emoji;
+      input.focus();
+    }
+
+    function addComment() {
+      const text = document.getElementById("commentInput").value.trim();
+      if (!text) return alert("댓글을 입력해주세요.");
+      comments.push({ author: user, text });
+      localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
+      document.getElementById("commentInput").value = "";
+      renderComments();
+    }
+
+    function deleteComment(index) {
+      if (!confirm("댓글을 삭제하시겠습니까?")) return;
+      comments.splice(index, 1);
+      localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
+      renderComments();
+    }
+
+    function editComment(index) {
+      const newText = prompt("댓글을 수정하세요", comments[index].text);
+      if (newText !== null) {
+        comments[index].text = newText;
+        localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
+        renderComments();
+      }
+    }
+  </script>
+</body>
+</html>

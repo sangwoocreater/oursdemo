@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .board-container {
+      max-width: 1000px;
+      margin: 100px auto 50px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      color: #333;
+    }
+    .board-container h2 {
+      margin-bottom: 20px;
+      color: #3498db;
+    }
+    .post-list {
+      list-style: none;
+      padding: 0;
+    }
+    .post-list li {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .write-button {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .write-form {
+      display: none;
+      margin-top: 20px;
+    }
+    .write-form input,
+    .write-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .write-form button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="board-container">
+    <h2>📌 게시판</h2>
+
+    <ul class="post-list" id="postList"></ul>
+
+    <button class="write-button" onclick="toggleWriteForm()">✍ 글쓰기</button>
+
+    <form class="write-form" id="postForm">
+      <input type="text" id="title" placeholder="제목" required />
+      <input type="text" id="author" placeholder="작성자" required />
+      <textarea id="content" rows="4" placeholder="내용" required></textarea>
+      <button type="submit">등록</button>
+    </form>
+  </div>
+
+  <script>
+    const postForm = document.getElementById("postForm");
+    const postList = document.getElementById("postList");
+    const writeForm = document.querySelector(".write-form");
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+      alert("로그인 후 이용해주세요.");
+      location.href = "login.html";
+    }
+
+    function toggleWriteForm() {
+      writeForm.style.display = writeForm.style.display === "block" ? "none" : "block";
+    }
+
+    postForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const author = document.getElementById("author").value;
+      const content = document.getElementById("content").value;
+
+      const posts = JSON.parse(localStorage.getItem("posts")) || [];
+      const post = { title, author, content, id: Date.now() };
+      posts.push(post);
+      localStorage.setItem("posts", JSON.stringify(posts));
+      addPostToList(post);
+      postForm.reset();
+      writeForm.style.display = "none";
+    });
+
+    function addPostToList(post) {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="post.html?id=${post.id}"><strong>${post.title}</strong></a> - ${post.author}`;
+      postList.appendChild(li);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const posts = JSON.parse(localStorage.getItem("posts")) || [];
+      posts.forEach(addPostToList);
+    });
+  </script>
+</body>
+</html>
