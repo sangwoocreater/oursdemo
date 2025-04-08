@@ -1,64 +1,58 @@
-// 슬라이드 배경 전환 기능
-let currentSlide = 0;
-const slides = document.querySelectorAll(".slide");
-
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.remove("active");
-    if (i === index) slide.classList.add("active");
-  });
-}
-
-setInterval(() => {
-  currentSlide = (currentSlide + 1) % slides.length;
-  showSlide(currentSlide);
-}, 4000);
-
-// 다크모드 토글
-const darkToggle = document.getElementById("darkModeToggle");
-darkToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-});
-
-// 로그인 상태 유지 및 메뉴 표시 전환
-window.addEventListener("DOMContentLoaded", () => {
-  const authArea = document.getElementById("authArea");
+// 헤더 기능 설정 함수
+function setupHeader() {
   const user = localStorage.getItem("user");
+  const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
-  if (user) {
-    authArea.innerHTML = `
-      <span><strong>${user}</strong> 님</span>
-      <a href="#" onclick="logout()">로그아웃</a>
-    `;
+  const guestMenu = document.getElementById("guestMenu");
+  const userMenu = document.getElementById("userMenu");
+  const userName = document.getElementById("userName");
+  const navRight = document.getElementById("navRight");
+
+  if (user && userMenu && guestMenu && userName) {
+    guestMenu.style.display = "none";
+    userMenu.style.display = "flex";
+    userName.textContent = `${user} 님`;
+  }
+
+  // 관리자 링크 추가
+  if (isAdmin && navRight && !document.getElementById("adminLink")) {
+    const adminLink = document.createElement("a");
+    adminLink.href = "admin.html";
+    adminLink.id = "adminLink";
+    adminLink.textContent = "관리자";
+    navRight.appendChild(adminLink);
+  }
+
+  // 로그아웃 버튼 이벤트 연결
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("isAdmin");
+      alert("로그아웃 되었습니다!");
+      location.href = "index.html";
+    });
+  }
+
+  // 햄버거 메뉴 토글
+  const navToggle = document.getElementById("navToggle");
+  if (navToggle && navRight) {
+    navToggle.addEventListener("click", () => {
+      navRight.classList.toggle("show");
+    });
+  }
+}
+
+// 페이지가 로드되면 헤더를 불러오고 기능 실행
+document.addEventListener("DOMContentLoaded", () => {
+  const headerPlaceholder = document.getElementById("header-placeholder");
+  if (headerPlaceholder) {
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        headerPlaceholder.innerHTML = data;
+        setupHeader(); // 헤더 로드 후 기능 실행
+      });
   }
 });
-
-function logout() {
-  localStorage.removeItem("user");
-  location.reload();
-}
-// 로그인된 사용자 확인
-const currentUser = sessionStorage.getItem("user");
-
-// 게시판 접근 제한
-if (!currentUser) {
-  alert("로그인한 사용자만 게시판을 이용할 수 있습니다.");
-  window.location.href = "login.html";
-}
-document.getElementById("postForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    if (!currentUser) {
-      alert("로그인한 사용자만 글을 쓸 수 있습니다.");
-      return;
-    }
-    ...
-  });
-  
-  function addComment(index) {
-    if (!currentUser) {
-      alert("로그인한 사용자만 댓글을 작성할 수 있습니다.");
-      return;
-    }
-    ...
-  }
-  

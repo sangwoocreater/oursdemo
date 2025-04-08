@@ -32,6 +32,10 @@
   </style>
 </head>
 <body>
+  <!-- ✅ 헤더 삽입 -->
+  <div id="header-placeholder"></div>
+  <script src="script.js"></script>
+
   <div class="post-container">
     <h2 id="postTitle"></h2>
     <p><strong>작성자:</strong> <span id="postAuthor"></span></p>
@@ -70,69 +74,54 @@
       document.body.innerHTML = '<p>게시글을 찾을 수 없습니다.</p>';
     } else {
       document.getElementById("postTitle").textContent = post.title;
-      document.getElementById("postAuthor").textContent = post.author;
+      document.getElementById("postAuthor").textContent = post.nickname;
       document.getElementById("postContent").textContent = post.content;
+      document.getElementById("likeCount").textContent = post.likes || 0;
     }
 
-    // 공감 수 처리
-    let likeCount = parseInt(localStorage.getItem(`like_${postId}`)) || 0;
-    document.getElementById("likeCount").textContent = likeCount;
+    // 좋아요 버튼
     document.getElementById("likeBtn").addEventListener("click", () => {
-      likeCount++;
-      localStorage.setItem(`like_${postId}`, likeCount);
-      document.getElementById("likeCount").textContent = likeCount;
+      if (!post) return;
+      post.likes = (post.likes || 0) + 1;
+      localStorage.setItem("posts", JSON.stringify(posts));
+      document.getElementById("likeCount").textContent = post.likes;
     });
 
-    // 댓글 표시
-    const commentList = document.getElementById("commentList");
-    let comments = JSON.parse(localStorage.getItem(`comments_${postId}`)) || [];
+    // 이모지 삽입
+    function insertEmoji(emoji) {
+      const input = document.getElementById("commentInput");
+      input.value += emoji;
+    }
 
+    // 댓글 추가
+    function addComment() {
+      const commentInput = document.getElementById("commentInput");
+      const content = commentInput.value.trim();
+      if (!content) return alert("댓글을 입력하세요.");
+
+      post.comments = post.comments || [];
+      post.comments.push({ user, content, time: new Date().toLocaleString() });
+      localStorage.setItem("posts", JSON.stringify(posts));
+      commentInput.value = "";
+      renderComments();
+    }
+
+    // 댓글 렌더링
     function renderComments() {
-      commentList.innerHTML = "";
-      comments.forEach((c, i) => {
+      const list = document.getElementById("commentList");
+      list.innerHTML = "";
+
+      if (!post.comments) return;
+
+      post.comments.forEach((c, i) => {
         const div = document.createElement("div");
         div.className = "comment";
-        div.innerHTML = `<p>${c.author}: ${c.text}</p>
-        <div class="comment-buttons">
-          <button onclick="editComment(${i})">수정</button>
-          <button onclick="deleteComment(${i})">삭제</button>
-        </div>`;
-        commentList.appendChild(div);
+        div.innerHTML = `<strong>${c.user}</strong> - ${c.time}<br>${c.content}`;
+        list.appendChild(div);
       });
     }
 
     renderComments();
-
-    function insertEmoji(emoji) {
-      const input = document.getElementById("commentInput");
-      input.value += emoji;
-      input.focus();
-    }
-
-    function addComment() {
-      const text = document.getElementById("commentInput").value.trim();
-      if (!text) return alert("댓글을 입력해주세요.");
-      comments.push({ author: user, text });
-      localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
-      document.getElementById("commentInput").value = "";
-      renderComments();
-    }
-
-    function deleteComment(index) {
-      if (!confirm("댓글을 삭제하시겠습니까?")) return;
-      comments.splice(index, 1);
-      localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
-      renderComments();
-    }
-
-    function editComment(index) {
-      const newText = prompt("댓글을 수정하세요", comments[index].text);
-      if (newText !== null) {
-        comments[index].text = newText;
-        localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
-        renderComments();
-      }
-    }
   </script>
 </body>
 </html>
