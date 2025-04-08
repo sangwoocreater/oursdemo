@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 페이지</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-container {
+      max-width: 1000px;
+      margin: 100px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #3498db;
+      margin-bottom: 20px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    button {
+      padding: 5px 10px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <div class="admin-container">
+    <h2>🔐 관리자 페이지</h2>
+
+    <section>
+      <h3>👤 회원 목록</h3>
+      <table id="userTable">
+        <tr><th>아이디</th><th>닉네임</th><th>이메일</th><th>삭제</th></tr>
+      </table>
+    </section>
+
+    <section>
+      <h3>📝 게시글 목록</h3>
+      <table id="postTable">
+        <tr><th>제목</th><th>작성자</th><th>삭제</th></tr>
+      </table>
+    </section>
+
+    <section>
+      <h3>💬 댓글 전체 삭제</h3>
+      <button onclick="clearAllComments()">⚠ 모든 댓글 삭제</button>
+    </section>
+  </div>
+
+  <script>
+    if (localStorage.getItem("user") !== "관리자") {
+      alert("관리자만 접근 가능합니다.");
+      location.href = "index.html";
+    }
+
+    // 사용자 테이블
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const userTable = document.getElementById("userTable");
+    users.forEach((user, i) => {
+      if (user.id === "admin") return; // 관리자 삭제 금지
+      const row = userTable.insertRow();
+      row.innerHTML = `
+        <td>${user.id}</td>
+        <td>${user.nickname}</td>
+        <td>${user.email}</td>
+        <td><button onclick="deleteUser(${i})">삭제</button></td>
+      `;
+    });
+
+    function deleteUser(index) {
+      if (!confirm("해당 회원을 삭제하시겠습니까?")) return;
+      users.splice(index, 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("삭제되었습니다.");
+      location.reload();
+    }
+
+    // 게시글 테이블
+    const posts = JSON.parse(localStorage.getItem("posts")) || [];
+    const postTable = document.getElementById("postTable");
+    posts.forEach((post, i) => {
+      const row = postTable.insertRow();
+      row.innerHTML = `
+        <td>${post.title}</td>
+        <td>${post.author}</td>
+        <td><button onclick="deletePost(${i})">삭제</button></td>
+      `;
+    });
+
+    function deletePost(index) {
+      if (!confirm("해당 게시글을 삭제하시겠습니까?")) return;
+      posts.splice(index, 1);
+      localStorage.setItem("posts", JSON.stringify(posts));
+      alert("삭제되었습니다.");
+      location.reload();
+    }
+
+    // 댓글 전체 삭제
+    function clearAllComments() {
+      if (!confirm("정말 모든 댓글을 삭제하시겠습니까?")) return;
+      for (let key in localStorage) {
+        if (key.startsWith("comments_")) {
+          localStorage.removeItem(key);
+        }
+      }
+      alert("모든 댓글이 삭제되었습니다.");
+    }
+  </script>
+
+  <!-- ✅ 헤더 삽입 -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+</body>
+</html>

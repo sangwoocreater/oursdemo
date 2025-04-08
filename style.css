@@ -136,3 +136,146 @@ footer {
     font-size: 16px;
   }
 }
+/* ✅ 챗봇 버튼 스타일 */
+.chatbot-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #3498db;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 999;
+  transition: background-color 0.3s;
+}
+
+.chatbot-button:hover {
+  background-color: #2980b9;
+}
+.chatbot-window {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.chatbot-header {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.chatbot-body {
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chatbot-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.chatbot-input input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chatbot-input button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#darkModeToggle {
+  margin-left: 10px;
+  background: none;
+  border: 2px solid #3498db;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: #3498db;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+#darkModeToggle:hover {
+  background: #3498db;
+  color: white;
+}
+/* 다크모드 네비게이션 텍스트 반전 */
+body.dark-mode header {
+  background-color: #1f1f1f;
+}
+
+body.dark-mode header a {
+  color: white;
+}
+
+body.dark-mode header a::after {
+  background-color: white;
+}
+
+body.dark-mode #darkModeToggle {
+  border-color: #fff;
+  color: #fff;
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background: #fff;
+  color: #121212;
+}
+/* 모바일 메뉴 - 다크모드 대응 */
+body.dark-mode .mobile-menu {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-mode .mobile-menu a {
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1;
+}
+
+/* 고정 푸터 */
+.site-footer {
+  background-color: #eee;
+  color: #333;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+}

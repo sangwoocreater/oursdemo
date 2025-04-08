@@ -1,0 +1,125 @@
+<header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="index.html" class="logo">🌐 Our Space</a>
+      </div>
+  
+      <div class="nav-toggle" id="navToggle">☰</div>
+  
+      <div class="nav-right" id="navRight">
+        <div id="guestMenu">
+          <a href="login.html">로그인</a>
+          <a href="signup.html">회원가입</a>
+        </div>
+        <div id="userMenu" style="display: none;">
+          <span id="userName"></span>
+          <a href="#" id="logoutBtn">로그아웃</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #3498db;
+      padding: 12px 20px;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+  
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+  
+    .nav-right a, .nav-right span {
+      margin-left: 15px;
+      color: white;
+      text-decoration: none;
+    }
+  
+    .nav-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+  
+    @media (max-width: 768px) {
+      .nav-right {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #3498db;
+        width: 100%;
+        padding: 10px 0;
+      }
+  
+      .nav-right.show {
+        display: flex;
+      }
+  
+      .nav-right a, .nav-right span {
+        margin: 10px 0;
+        text-align: center;
+      }
+  
+      .nav-toggle {
+        display: block;
+      }
+    }
+  </style>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const navToggle = document.getElementById("navToggle");
+      const navRight = document.getElementById("navRight");
+      const user = localStorage.getItem("user");
+      const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+  
+      const userMenu = document.getElementById("userMenu");
+      const guestMenu = document.getElementById("guestMenu");
+      const userName = document.getElementById("userName");
+  
+      if (user) {
+        guestMenu.style.display = "none";
+        userMenu.style.display = "flex";
+        userName.textContent = `${user} 님`;
+      }
+  
+      if (isAdmin) {
+        const adminLink = document.createElement("a");
+        adminLink.href = "admin.html";
+        adminLink.textContent = "관리자";
+        navRight.appendChild(adminLink);
+      }
+  
+      const logoutBtn = document.getElementById("logoutBtn");
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("isAdmin");
+        location.href = "index.html";
+      });
+  
+      navToggle.addEventListener("click", () => {
+        navRight.classList.toggle("show");
+      });
+    });
+  </script>
+  

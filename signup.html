@@ -73,3 +73,27 @@
   </script>
 </body>
 </html>
+<body>
+  <div id="header-placeholder"></div>
+
+  <script>
+    fetch("header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+
+        // 다크모드 버튼 기능 다시 연결
+        document.getElementById("darkModeToggle").addEventListener("click", () => {
+          document.body.classList.toggle("dark-mode");
+        });
+
+        // 관리자 메뉴 표시
+        const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+        if (isAdmin) {
+          const adminLink = document.createElement("a");
+          adminLink.href = "admin.html";
+          adminLink.textContent = "관리자";
+          document.getElementById("navRight").appendChild(adminLink);
+        }
+      });
+  </script>

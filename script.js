@@ -37,3 +37,28 @@ function logout() {
   localStorage.removeItem("user");
   location.reload();
 }
+// 로그인된 사용자 확인
+const currentUser = sessionStorage.getItem("user");
+
+// 게시판 접근 제한
+if (!currentUser) {
+  alert("로그인한 사용자만 게시판을 이용할 수 있습니다.");
+  window.location.href = "login.html";
+}
+document.getElementById("postForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (!currentUser) {
+      alert("로그인한 사용자만 글을 쓸 수 있습니다.");
+      return;
+    }
+    ...
+  });
+  
+  function addComment(index) {
+    if (!currentUser) {
+      alert("로그인한 사용자만 댓글을 작성할 수 있습니다.");
+      return;
+    }
+    ...
+  }
+  

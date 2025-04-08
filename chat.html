@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채팅</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #f0f8ff;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .chat-container {
+      max-width: 800px;
+      margin: 100px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .chat-header {
+      margin-bottom: 20px;
+    }
+    .chat-header select {
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .chat-box {
+      border: 1px solid #ccc;
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      background: #fafafa;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .mine {
+      text-align: right;
+      color: #2ecc71;
+    }
+    .theirs {
+      text-align: left;
+      color: #3498db;
+    }
+    .chat-input {
+      display: flex;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .chat-input button {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>💬 1:1 채팅</h2>
+      <label>대화 상대:
+        <select id="chatTarget"></select>
+      </label>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="chat-input">
+      <input type="text" id="chatMessage" placeholder="메시지를 입력하세요" />
+      <button onclick="sendMessage()">전송</button>
+    </div>
+  </div>
+
+  <script>
+    const user = localStorage.getItem("user");
+    if (!user) {
+      alert("로그인 후 이용해주세요.");
+      location.href = "login.html";
+    }
+
+    const chatTargetSelect = document.getElementById("chatTarget");
+    const chatBox = document.getElementById("chatBox");
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    users.forEach(u => {
+      if (u.nickname !== user && u.approved) {
+        const option = document.createElement("option");
+        option.value = u.nickname;
+        option.textContent = u.nickname;
+        chatTargetSelect.appendChild(option);
+      }
+    });
+
+    function getChatKey() {
+      const target = chatTargetSelect.value;
+      const names = [user, target].sort();
+      return `chat_${names[0]}_${names[1]}`;
+    }
+
+    function loadMessages() {
+      const key = getChatKey();
+      const messages = JSON.parse(localStorage.getItem(key)) || [];
+      chatBox.innerHTML = "";
+
+      messages.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "message " + (m.sender === user ? "mine" : "theirs");
+        div.innerHTML = `<strong>${m.sender}</strong>: ${m.text} <br><small>${m.time}</small>`;
+        chatBox.appendChild(div);
+      });
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const text = document.getElementById("chatMessage").value.trim();
+      if (!text) return;
+
+      const key = getChatKey();
+      const messages = JSON.parse(localStorage.getItem(key)) || [];
+      messages.push({
+        sender: user,
+        text,
+        time: new Date().toLocaleTimeString()
+      });
+      localStorage.setItem(key, JSON.stringify(messages));
+      document.getElementById("chatMessage").value = "";
+      loadMessages();
+    }
+
+    chatTargetSelect.addEventListener("change", loadMessages);
+
+    setInterval(() => {
+      if (chatTargetSelect.value) {
+        loadMessages();
+      }
+    }, 1000);
+  </script>
+
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+</body>
+</html>
