@@ -2,120 +2,174 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our Space</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .container { flex: 1; }
+
+    .slideshow {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide.active { opacity: 1; }
+
+    .slide-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      z-index: 2;
+      font-weight: bold;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+      white-space: pre-line;
+    }
+
+    .slide-text .title { font-size: 50px; }
+    .slide-text .subtitle { font-size: 24px; }
+
+    footer.site-footer {
+      background-color: #eee;
+      color: #333;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 14px;
+      border-top: 1px solid #ccc;
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
-  <!-- ✅ 챗봇 버튼 -->
-  <div class="chatbot-button" id="chatbotBtn" onclick="toggleChatbot()">💬</div>
-</body>
-  <!-- ✅ 챗봇 창 -->
+  <div id="header-placeholder"></div>
+
+  <div class="slideshow">
+    <div class="slide-text">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+    </div>
+    <img class="slide active" src="https://source.unsplash.com/1600x900/?global,people" />
+    <img class="slide" src="https://source.unsplash.com/1600x900/?culture,world" />
+    <img class="slide" src="https://source.unsplash.com/1600x900/?community,friends" />
+  </div>
+
+  <div class="chatbot-button" onclick="toggleChatbot()">💬</div>
+
   <div class="chatbot-window" id="chatbot">
     <div class="chatbot-header">
       <span>챗봇 상담</span>
-      <button onclick="toggleChatbot()">✖</button>
+      <button onclick="toggleChatbot()">❌</button>
     </div>
-    <div class="chatbot-body" id="chatbot-body">
-      <p>안녕하세요! 무엇을 도와드릴까요?</p>
-    </div>
+    <div class="chatbot-body"></div>
     <div class="chatbot-input">
-      <input type="text" id="chatInput" placeholder="메시지를 입력하세요..." />
-      <button id="sendBtn">전송</button>
+      <input type="text" id="chatbotInput" placeholder="메시지를 입력하세요..." />
+      <button onclick="sendMessage()">전송</button>
     </div>
   </div>
 
-  <!-- 상단 메뉴 -->
-  <header>
-    <div class="nav-left">
-      <a href="index.html">홈</a>
-      <button id="darkModeToggle">🌙</button>
-    </div>
-    <div class="nav-center">
-      <a href="board.html">게시판</a>
-      <a href="#">다문화 가정</a>
-      <a href="#">유학생</a>
-      <a href="#">외국인 근로자</a>
-    </div>
-    <div class="nav-right" id="navRight">
-      <a href="login.html">로그인</a>
-      <a href="signup.html">회원가입</a>
-    </div>
-  </header>
-
-  <!-- 메인 컨테이너 -->
-  <div class="container">
-    <h1>Welcome to Our Space 🌍</h1>
-    <p>다문화 가정, 유학생, 외국인 근로자를 위한 글로벌 커뮤니티 플랫폼</p>
-  </div>
-
-  <!-- 하단 정보 -->
-  <footer>
-    <div class="footer">
-      <p>사업자명: Our Space  | 대표자: 이상우  | 연락처: 010-1234-5678  | 이메일: ourspace@example.com</p>
-      <p>&copy; 2025 Our Space. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>© 2025 Our Space. All rights reserved.</p>
+      <p>사업자등록번호: 123-45-67890 | 대표: 홍길동 | 서울특별시 글로벌로 123</p>
     </div>
   </footer>
 
-  <!-- 스크립트 -->
   <script>
-    // 🌙 다크모드 토글
-document.getElementById("darkModeToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-});
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 4000);
 
     function toggleChatbot() {
       const chatbot = document.getElementById("chatbot");
       chatbot.style.display = chatbot.style.display === "flex" ? "none" : "flex";
     }
 
-    document.getElementById("sendBtn").addEventListener("click", async () => {
-      const input = document.getElementById("chatInput");
+    async function sendMessage() {
+      const input = document.getElementById('chatbotInput');
       const message = input.value.trim();
-      const chatBody = document.getElementById("chatbot-body");
+      const chatBody = document.querySelector('.chatbot-body');
 
       if (!message) return;
 
-      const userMsg = document.createElement("p");
-      userMsg.textContent = "🙋‍♂️ " + message;
-      chatBody.appendChild(userMsg);
-      input.value = "";
+      chatBody.innerHTML += `<p><strong>나:</strong> ${message}</p>`;
+      input.value = '';
 
-      const botMsg = document.createElement("p");
-      botMsg.textContent = "🧠 답변을 불러오는 중...";
-      chatBody.appendChild(botMsg);
+      const loadingMsg = document.createElement('p');
+      loadingMsg.textContent = '답변 중입니다...';
+      chatBody.appendChild(loadingMsg);
 
       try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer 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"
+            'Authorization': 'Bearer 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',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: message }]
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: message }]
           })
         });
 
-        const data = await response.json();
-        const reply = data.choices?.[0]?.message?.content || "❗ 응답을 이해할 수 없습니다.";
-        botMsg.textContent = "🧠 " + reply;
-        chatBody.scrollTop = chatBody.scrollHeight;
-      } catch (error) {
-        botMsg.textContent = "❗ 오류 발생: " + error.message;
-      }
-    });
+        if (!response.ok) throw new Error(`API 에러: ${response.status} ${response.statusText}`);
 
-    // 관리자 로그인 여부 확인
-    const isAdmin = sessionStorage.getItem("isAdmin") === "true";
-    if (isAdmin) {
-      const navRight = document.getElementById("navRight");
-      const adminLink = document.createElement("a");
-      adminLink.href = "admin.html";
-      adminLink.textContent = "관리자";
-      navRight.appendChild(adminLink);
+        const data = await response.json();
+        loadingMsg.remove();
+
+        chatBody.innerHTML += `<p><strong>챗봇:</strong> ${data.choices[0].message.content}</p>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+      } catch (error) {
+        loadingMsg.textContent = '오류가 발생했습니다: ' + error.message;
+        console.error(error);
+      }
     }
+
+    const typingTitle = document.querySelector('.slide-text .title');
+    const typingSubtitle = document.querySelector('.slide-text .subtitle');
+
+    const titleText = "Welcome to Our Space 🌍";
+    const subtitleText = "다문화 가정, 유학생, 외국인 근로자를 위한 글로벌 커뮤니티 플랫폼";
+
+    let titleIndex = 0, subtitleIndex = 0;
+
+    function typeTitle() {
+      if (titleIndex < titleText.length) {
+        typingTitle.textContent += titleText.charAt(titleIndex++);
+        setTimeout(typeTitle, 50);
+      } else setTimeout(typeSubtitle, 500);
+    }
+
+    function typeSubtitle() {
+      if (subtitleIndex < subtitleText.length) {
+        typingSubtitle.textContent += subtitleText.charAt(subtitleIndex++);
+        setTimeout(typeSubtitle, 30);
+      }
+    }
+
+    typingTitle.textContent = '';
+    typingSubtitle.textContent = '';
+    typeTitle();
   </script>
+  <script src="script.js"></script>
 </body>
 </html>

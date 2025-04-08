@@ -1,3 +1,4 @@
+
 /* 기본 초기화 */
 * {
   margin: 0;
@@ -10,6 +11,13 @@ body {
   background-color: #f4f4f4;
   color: #333;
   line-height: 1.6;
+  background-image: url('https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -58,6 +66,7 @@ header a:hover::after {
 .container {
   padding: 100px 20px 60px;
   text-align: center;
+  flex: 1;
 }
 
 h1 {
@@ -105,18 +114,42 @@ body.dark-mode footer {
   color: #ccc;
 }
 
-/* 하단 푸터 */
-footer {
-  background-color: #eee;
-  color: #333;
-  padding: 20px 0;
-  text-align: center;
-  font-size: 14px;
-  margin-top: 60px;
+body.dark-mode header a {
+  color: white;
 }
 
-.footer-container p {
-  margin: 5px 0;
+body.dark-mode header a::after {
+  background-color: white;
+}
+
+body.dark-mode #darkModeToggle {
+  border-color: #fff;
+  color: #fff;
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background: #fff;
+  color: #121212;
+}
+
+body.dark-mode .mobile-menu {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-mode .mobile-menu a {
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* 고정 푸터 */
+.site-footer {
+  background-color: #eee;
+  color: #333;
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+  margin-top: auto;
 }
 
 /* 반응형 */
@@ -136,7 +169,8 @@ footer {
     font-size: 16px;
   }
 }
-/* ✅ 챗봇 버튼 스타일 */
+
+/* 챗봇 버튼 스타일 */
 .chatbot-button {
   position: fixed;
   bottom: 20px;
@@ -155,6 +189,7 @@ footer {
 .chatbot-button:hover {
   background-color: #2980b9;
 }
+
 .chatbot-window {
   display: none;
   flex-direction: column;
@@ -210,6 +245,7 @@ footer {
   border-radius: 5px;
   cursor: pointer;
 }
+
 #darkModeToggle {
   margin-left: 10px;
   background: none;
@@ -225,64 +261,4 @@ footer {
 #darkModeToggle:hover {
   background: #3498db;
   color: white;
-}
-/* 다크모드 네비게이션 텍스트 반전 */
-body.dark-mode header {
-  background-color: #1f1f1f;
-}
-
-body.dark-mode header a {
-  color: white;
-}
-
-body.dark-mode header a::after {
-  background-color: white;
-}
-
-body.dark-mode #darkModeToggle {
-  border-color: #fff;
-  color: #fff;
-}
-
-body.dark-mode #darkModeToggle:hover {
-  background: #fff;
-  color: #121212;
-}
-/* 모바일 메뉴 - 다크모드 대응 */
-body.dark-mode .mobile-menu {
-  background-color: rgba(0, 0, 0, 0.9);
-}
-
-body.dark-mode .mobile-menu a {
-  color: white;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-html, body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.container {
-  flex: 1;
-}
-
-/* 고정 푸터 */
-.site-footer {
-  background-color: #eee;
-  color: #333;
-  text-align: center;
-  padding: 15px 10px;
-  font-size: 14px;
-  border-top: 1px solid #ccc;
-}
-
-body {
-  background-image: url('https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=1950&q=80');
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
 }
